@@ -3,9 +3,9 @@ let books = {
     2: { "author": "Hans Christian Andersen", "title": "Fairy tales", "reviews": {} },
     3: {
         "author": "Dante Alighieri", "title": "The Divine Comedy", "reviews": {
-            1: "The Divine Comedy is a breathtaking journey through Hell, Purgatory, and Paradise, blending vivid imagination with profound philosophical and theological insight.",
-            2: "In The Divine Comedy, Dante crafts a timeless exploration of sin, redemption, and divine justice that remains both intellectually challenging and emotionally powerful.",
-            3: "The Divine Comedy stands as a monumental work of world literature, combining poetic mastery with a deeply personal spiritual quest that continues to resonate today."
+            1: { text: "The Divine Comedy is a breathtaking journey through Hell, Purgatory, and Paradise, blending vivid imagination with profound philosophical and theological insight." },
+            2: { text: "In The Divine Comedy, Dante crafts a timeless exploration of sin, redemption, and divine justice that remains both intellectually challenging and emotionally powerful." },
+            3: { text: "The Divine Comedy stands as a monumental work of world literature, combining poetic mastery with a deeply personal spiritual quest that continues to resonate today." }
         }
     },
     4: { "author": "Unknown", "title": "The Epic Of Gilgamesh", "reviews": {} },
