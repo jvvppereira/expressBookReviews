@@ -76,13 +76,24 @@ regd_users.put("/auth/review/:isbn", (req, res) => {
     const newReview = req.body.review;
     const nextIndex = Object.keys(book.reviews).length + 1
 
-    book.reviews[nextIndex] = { text: newReview, createdBy: req.user }
+    book.reviews[nextIndex] = { text: newReview, createdBy: req.session.authorization['username'] }
 
     return res.status(200).send(`Review '${newReview}' was added to ${isbn} - '${book.title}' book`);
 });
 
 regd_users.delete("/auth/review/:isbn", (req, res) => {
+    const isbn = req.params.isbn
+    const book = books[isbn]
 
+    if (!book) {
+        return res.status(404).send(`Not found a book with ${isbn} ISBN`);
+    }
+
+    const username = req.session.authorization['username'];
+
+    books =  books.filter()
+
+    return res.status(200).send(`Deleted reviews of ${isbn} - '${book.title}' book added by '${username}' user`);
 });
 
 module.exports.authenticated = regd_users;
