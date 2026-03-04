@@ -5,10 +5,6 @@ const regd_users = express.Router();
 
 let users = [];
 
-const isValid = (username) => { //returns boolean
-    //write code to check is the username is valid
-}
-
 // Check if a user with the given username already exists
 const doesExist = (username) => {
     // Filter the users array for any user with the same username
@@ -74,7 +70,7 @@ regd_users.put("/auth/review/:isbn", (req, res) => {
     }
 
     const newReview = req.body.review;
-    const nextIndex = Object.keys(book.reviews).length + 1
+    const nextIndex = Number(Object.keys(book.reviews).pop()) + 1
 
     book.reviews[nextIndex] = { text: newReview, createdBy: req.session.authorization['username'] }
 
@@ -91,12 +87,15 @@ regd_users.delete("/auth/review/:isbn", (req, res) => {
 
     const username = req.session.authorization['username'];
 
-    books =  books.filter()
+    for (let [id, review] of Object.entries(book.reviews)) {
+        if (review?.createdBy == username) {
+            delete book.reviews[id]
+        }
+    }
 
-    return res.status(200).send(`Deleted reviews of ${isbn} - '${book.title}' book added by '${username}' user`);
+    return res.status(200).send(`Deleted all reviews of ${isbn} - '${book.title}' book added by '${username}' user`);
 });
 
 module.exports.authenticated = regd_users;
-module.exports.isValid = isValid;
 module.exports.doesExist = doesExist;
 module.exports.users = users;
