@@ -72,9 +72,16 @@ regd_users.put("/auth/review/:isbn", (req, res) => {
     const newReview = req.body.review;
     const nextIndex = Number(Object.keys(book.reviews).pop()) + 1
 
-    book.reviews[nextIndex] = { text: newReview, createdBy: req.session.authorization['username'] }
+    const username = req.session.authorization['username'];
+    book.reviews[nextIndex] = { text: newReview, createdBy: username }
 
-    return res.status(200).send(`Review '${newReview}' was added to ${isbn} - '${book.title}' book`);
+    const result = {
+        "message": `Review '${newReview}' was added to ${isbn} - '${book.title}' book`,
+        "reviews": { }
+    }
+    result.reviews[username] = newReview 
+
+    return res.status(200).json(result);
 });
 
 regd_users.delete("/auth/review/:isbn", (req, res) => {
@@ -93,7 +100,7 @@ regd_users.delete("/auth/review/:isbn", (req, res) => {
         }
     }
 
-    return res.status(200).send(`Deleted all reviews of ${isbn} - '${book.title}' book added by '${username}' user`);
+    return res.status(200).json({ message: `Deleted all reviews of ${isbn} - '${book.title}' book added by '${username}' user` });
 });
 
 module.exports.authenticated = regd_users;
