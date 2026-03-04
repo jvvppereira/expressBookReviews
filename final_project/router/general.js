@@ -2,6 +2,7 @@ const express = require('express');
 const books = require("./booksdb.js");
 const { doesExist, users } = require("./auth_users.js");
 const public_users = express.Router();
+const THREE_SECONDS = 3 * 1000;
 
 public_users.post("/register", (req, res) => {
     const username = req.body.username;
@@ -24,24 +25,54 @@ public_users.post("/register", (req, res) => {
 
 // Get the book list available in the shop
 public_users.get('/', function (req, res) {
-    res.status(200).send(books);
+    const promise = new Promise(resolve => {
+        setTimeout(() => {
+            resolve(books);
+        }, THREE_SECONDS)
+    })
+    promise.then(data => res.status(200).send(data))
+    // res.status(200).send(books)
 });
 
 // Get book details based on ISBN (International Standard Book Number)
 public_users.get('/isbn/:isbn', function (req, res) {
-    res.status(200).send(books[req.params.isbn]);
+    const promise = new Promise(resolve => {
+        setTimeout(() => {
+            resolve(books[req.params.isbn]);
+        }, THREE_SECONDS)
+    })
+    promise.then(data => res.status(200).send(data))
+    // res.status(200).send(books[req.params.isbn]);
 });
 
 // Get book details based on author
 public_users.get('/author/:author', function (req, res) {
-    const booksFilteredByAuthor = Object.values(books).filter(book => book.author.toLowerCase() == req.params.author.toLowerCase());
-    res.status(200).send(booksFilteredByAuthor);
+    const promise = new Promise(resolve => {
+        setTimeout(() => {
+            const booksFilteredByAuthor = Object.values(books).filter(book =>
+                book.author.toLowerCase() == req.params.author.toLowerCase()
+            );
+            resolve(booksFilteredByAuthor);
+        }, THREE_SECONDS)
+    })
+    promise.then(data => res.status(200).send(data))
+    // const booksFilteredByAuthor = Object.values(books).filter(book => book.author.toLowerCase() == req.params.author.toLowerCase());
+    // res.status(200).send(booksFilteredByAuthor);
 });
 
 // Get all books based on title
 public_users.get('/title/:title', function (req, res) {
-    const booksFilteredByTitle = Object.values(books).filter(book => book.title.toLowerCase().startsWith(req.params.title.toLowerCase()));
-    res.status(200).send(booksFilteredByTitle);
+    const promise = new Promise(resolve => {
+        const booksFilteredByTitle = Object.values(books).filter(book => 
+            book.title.toLowerCase().startsWith(req.params.title.toLowerCase())
+        );
+        setTimeout(() => {
+            resolve(booksFilteredByTitle);
+        }, THREE_SECONDS)
+    })
+    promise.then(data => res.status(200).send(data))
+    // const booksFilteredByTitle = Object.values(books).filter(book => book.title.toLowerCase().startsWith(req.params.title.toLowerCase()));
+    // res.status(200).send(booksFilteredByTitle);
 });
 
 //  Get book review
